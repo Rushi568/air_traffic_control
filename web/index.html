@@ -1,0 +1,253 @@
+<html>
+
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="refresh" content="300">
+        <title>Alexevan24 | Track Flights In Realtime - Flight Tracker For Live Flights </title>
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+        <style>
+            /* Always set the map height explicitly to define the size of the div
+             * element that contains the map. */
+            #map {
+                height: 91%;
+                opacity: 1;
+                background-color:black; 
+            }
+            /* Optional: Makes the sample page fill the window. */
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                opacity: 1;
+                background-color: black;
+            }
+            body {
+                font-family: "Lato", sans-serif;
+            }
+
+            .sidenav {
+                height: 100%;
+                width: 200px;
+                position: fixed;
+                z-index: 1;
+                top: 0;
+                left: 0;
+                background-color: #111;
+                overflow-x: hidden;
+                padding-top: 20px;
+                margin-top: 56px;
+            }
+
+            .sidenav a {
+                padding: 6px 8px 6px 16px;
+                text-decoration: none;
+                font-size: 25px;
+                color: #818181;
+                display: block;
+            }
+
+            .sidenav a:hover {
+                color: #f1f1f1;
+            }
+
+            .main {
+                margin-left: 200px; /* Same as the width of the sidenav */
+                font-size: 28px; /* Increased text to enable scrolling */
+                padding: 0px 0px;
+            }
+
+            @media screen and (max-height: 450px) {
+                .sidenav {padding-top: 15px;}
+                .sidenav a {font-size: 18px;}
+            }
+            span{
+                font-size: 10px;
+                font-weight: bold;
+                color: lightpink;
+                text-align: right;
+            }
+            img{
+              height: 30px;
+              width: auto;
+            };
+            h4{
+                
+            }
+        </style>
+        
+        <script src="js/mapstyle.js"></script>
+        <script src="js/routes.js"></script>
+        <script src="js/airports.js"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+       
+        <script src="js/loadmapopt.js"></script>
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOm4KJ7Z5m1YewVFaqE3J3SYRXLZ6skNI&callback=initMap">
+        </script>
+
+    </head>
+    <body>
+        <script>
+            setInterval(function () {
+     $(document).ready(function () {       
+    
+    var d = new Date();
+    var time=d.toUTCString();
+     $("#utc").text(time);
+ },999);
+});
+        </script>
+         <div class="fluid">
+        <!-- NAVBAR STARTS HERE  -->
+        <nav class="navbar navbar-inverse" style="z-index: 2;">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#"><img src="images/AATC White.png"/></a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#"></a></li>
+                    <li><a href="#"></a></li>
+                    <li><a href="#"></a></li>
+                    <li style=" text-transform: capitalize;"><h5 id="utc" style="color:whitesmoke"></h5></li>
+                </ul>
+            </div>
+        </nav>
+
+
+        <!-- SIDEBAR STARTS HERE -->
+
+       
+            <div class="sidenav">
+                <div class="fluid">
+                    <div class="col-lg-12">
+                        <div class="table-responsive"> 
+                            <h4 style="text-align: center;"><span>FLIGHTS : </span><span id="vtotal1" style="color: white;">-</span><span>  /  </span><span id="total1" style="color: white;">-</span></h4>
+                            <table class="fluid table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th><span style="color: #cccccc;font-size: 10.5px;">DATA-SOURCE</span></th>
+                                        <th><span style="color: #cccccc;font-size: 10.5px;">|</span></th>
+                                        <th> <span style="color: #cccccc;font-size: 10.5px;">VIEW</span></th>
+                                        <th><span style="color: #cccccc;font-size: 10.5px;">|</span></th>
+                                        <th><span style="color: #cccccc;font-size: 10.5px;">GOLBAL</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span></span> </td>
+                                        <td></td>
+                                        <td><span></span> </td>
+                                        <td></td>
+                                        <td><span></span> </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span></span> </td>
+                                        <td></td>
+                                        <td><span></span> </td>
+                                        <td></td>
+                                        <td><span></span> </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><span></span> </td>
+                                        <td></td>
+                                        <td><span></span> </td>
+                                        <td></td>
+                                        <td><span></span> </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span style="color: whitesmoke;text-align: left;">ADS-B</span></td>
+                                        <td></td>
+                                        <td>  <span id="vads">-</span>   </td>
+                                        <td></td>
+                                        <td><span id="ads" >-</span><td>
+                                    </tr>
+                                    <tr>
+                                        <td><span style="color: whitesmoke;text-align: left;">MLAT</span></td>
+                                        <td></td>
+                                        <td>  <span id="vmlat">-</span>   </td>
+                                        <td></td>
+                                        <td><span id="mlat" >-</span><td>
+                                    </tr>
+                                    <tr>
+                                        <td><span style="color: whitesmoke;text-align: left;">FAA</span></td>
+                                        <td></td>
+                                        <td>  <span id="vfaa">-</span>   </td>
+                                        <td></td>
+                                        <td><span id="faa" >-</span><td>
+                                    </tr>
+                                    <tr>
+                                        <td><span style="color: whitesmoke;text-align: left;">FLARM</span></td>
+                                        <td></td>
+                                        <td>  <span id="vflarm">-</span>   </td>
+                                        <td></td>
+                                        <td><span id="flarm" >-</span><td>
+                                    </tr>
+                                    <tr>
+                                        <td><span style="color: whitesmoke;text-align: left;">ESTIMATED</span></td>
+                                        <td></td>
+                                        <td> <span id="vestimated">-</span>   </td>
+
+                                        <td></td>
+                                        <td><span id="estimated" >-</span><td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td><span></span> </td>
+                                        <td><span></span> </td>
+                                        <td><span></span> </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span></span> </td>
+                                        <td><span></span> </td>
+                                        <td><span></span> </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><span></span> </td>
+                                        <td><span></span> </td>
+                                        <td><span></span> </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td><span style="color:whitesmoke;text-align: left;">TOTAL</span></td>
+                                        <td></td>
+                                        <td>  <span id="vtotal">-</span>   </td>
+                                        <td></td>
+                                        <td><span id="total" >-</span><td>
+                                    </tr>
+                                </tbody> 
+                            </table>     
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main">
+                <div id="map">
+                    
+                    <br>
+                     
+                    <br>
+                    <br>
+                    <br>
+                    <p style="text-align:center;"><img src="images/AATC White.png" style="height: 180;width: auto;"></p>
+
+                    <br>
+                    <h1 style="text-align: center; color:#dddddd;">L    O    A    D    I    N    G . . .</h1>
+                    <br>
+                   
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+    </body>
+</html>
